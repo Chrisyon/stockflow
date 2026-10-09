@@ -1,0 +1,16 @@
+package com.stockflow.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class InsufficientStockException extends RuntimeException {
+
+    public InsufficientStockException(String productName, int available, int requested) {
+        super(String.format("Stok produk '%s' tidak mencukupi. Stok tersedia: %d, diminta: %d", productName, available, requested));
+    }
+
+    public InsufficientStockException(String message) {
+        super(message);
+    }
+}
