@@ -14,12 +14,15 @@ import {
   ShieldAlert,
   LogOut,
   Store,
+  X,
 } from 'lucide-react';
 
 interface SidebarProps {
   activePage: string;
   setActivePage: (page: string) => void;
   lowStockCount: number;
+  isMobileOpen?: boolean;
+  onCloseMobile?: () => void;
 }
 
 interface MenuItem {
@@ -30,7 +33,13 @@ interface MenuItem {
   badge?: number;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ activePage, setActivePage, lowStockCount }) => {
+export const Sidebar: React.FC<SidebarProps> = ({
+  activePage,
+  setActivePage,
+  lowStockCount,
+  isMobileOpen = false,
+  onCloseMobile,
+}) => {
   const { user, switchRole, logout } = useAuth();
   const currentRole = user?.role || 'ADMIN';
 
@@ -95,16 +104,32 @@ export const Sidebar: React.FC<SidebarProps> = ({ activePage, setActivePage, low
   const visibleMenuItems = menuItems.filter(item => item.roles.includes(currentRole));
 
   return (
-    <aside className="w-64 bg-slate-900 text-slate-300 flex flex-col shrink-0 min-h-screen border-r border-slate-800">
+    <aside
+      className={`w-64 bg-slate-900 text-slate-300 flex flex-col shrink-0 min-h-screen border-r border-slate-800 transition-all duration-300 z-50 ${
+        isMobileOpen
+          ? 'fixed inset-y-0 left-0 shadow-2xl translate-x-0'
+          : 'hidden md:flex md:static'
+      }`}
+    >
       {/* Brand Header */}
-      <div className="p-5 border-b border-slate-800 flex items-center gap-3">
-        <div className="p-2 rounded-xl bg-brand-600 text-white shadow-md">
-          <Store className="h-6 w-6" />
+      <div className="p-5 border-b border-slate-800 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-xl bg-brand-600 text-white shadow-md">
+            <Store className="h-6 w-6" />
+          </div>
+          <div>
+            <h1 className="text-base font-bold text-white tracking-wide">StockFlow</h1>
+            <p className="text-[10px] text-slate-400 font-medium tracking-wider uppercase">Inventory & Sales</p>
+          </div>
         </div>
-        <div>
-          <h1 className="text-base font-bold text-white tracking-wide">StockFlow</h1>
-          <p className="text-[10px] text-slate-400 font-medium tracking-wider uppercase">Inventory & Sales</p>
-        </div>
+        {onCloseMobile && (
+          <button
+            onClick={onCloseMobile}
+            className="md:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        )}
       </div>
 
       {/* Quick Role Switcher (Portfolio Reviewer Helper) */}
