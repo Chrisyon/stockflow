@@ -1,5 +1,0 @@
-com\stockflow\service\AuthServiceTest.class
-com\stockflow\service\TransactionServiceTest.class
-com\stockflow\service\ReportServiceTest.class
-com\stockflow\service\ProductServiceTest.class
-com\stockflow\service\TransactionConcurrencyTest.class
